@@ -1,0 +1,38 @@
+UPDATE
+  PHOTOS ph1
+SET
+  (
+    photo,
+    signature
+  )
+  =
+  (
+    SELECT
+      photo,
+      signature
+    FROM
+      el_photoa
+    WHERE
+      el_photo.idphoto =:id_photo
+  )
+WHERE
+  idperson =
+  (
+    SELECT
+      rowguid
+    FROM
+      card_bsuir_user.cards_student_E_V stud
+    WHERE
+      EXISTS
+      (
+        SELECT
+          1
+        FROM
+          EL_PHOTO
+        WHERE
+          Upper(stud.NAME_F)  =upper(EL_PHOTO.FAM)
+        AND el_photo.idphoto  =:id_photo
+        AND upper(stud.NAME_I)= upper(im)
+        AND upper(stud.name_o)=upper(ots)
+      )
+  )
